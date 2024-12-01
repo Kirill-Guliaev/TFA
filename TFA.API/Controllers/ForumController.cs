@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TFA.Storage;
+using TFA.API.Models;
+using TFA.Domain.UseCases.GetForums;
 
 namespace TFA.API.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("forums")]
 public class ForumController : ControllerBase
 {
     /// <summary>
@@ -15,14 +15,12 @@ public class ForumController : ControllerBase
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet]
-    [ProducesResponseType(200, Type = typeof(string[]))]
+    [ProducesResponseType(200, Type = typeof(ForumResponse[]))]
     public async Task<IActionResult> GetForums(
-        [FromServices] ForumDbContext dbContext,
+        [FromServices] IGetForumsUseCase useCase,
         CancellationToken cancellationToken)
     {
-        await dbContext.Forums.AddAsync(new Forum() { ForumId =  Guid.NewGuid(), Title = "test title" });
-        await dbContext.SaveChangesAsync();
-        var forumTitles = await dbContext.Forums.Select(f => f.Title).ToArrayAsync(cancellationToken);
-        return Ok(forumTitles);
+        var forums = await useCase.ExecuteAsync(cancellationToken);
+        return Ok(forums.Select(f => new ForumResponse() { Id = f.Id, Title = f.Title }));
     }
 }
