@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using TFA.Domain.UseCases.CreateTopic;
 using TFA.Domain.UseCases.GetForums;
 using TFA.Storage;
