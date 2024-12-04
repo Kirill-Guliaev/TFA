@@ -1,22 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
-using TFA.Storage;
-using Forum = TFA.Domain.Models.Forum;
+﻿using TFA.Domain.Models;
 
 namespace TFA.Domain.UseCases.GetForums;
 
 public class GetForumsUseCase : IGetForumsUseCase
 {
-    private readonly ForumDbContext forumDbContext;
+    private readonly IGetForumsStorage getForumsStorage;
 
-    public GetForumsUseCase(ForumDbContext forumDbContext)
+    public GetForumsUseCase(IGetForumsStorage getForumsStorage)
     {
-        this.forumDbContext = forumDbContext;
+        this.getForumsStorage = getForumsStorage;
     }
 
     public async Task<IEnumerable<Forum>> ExecuteAsync(CancellationToken cancellationToken)
     {
-        return await forumDbContext.Forums
-            .Select(f => new Forum() { Id = f.ForumId, Title = f.Title })
-            .ToArrayAsync(cancellationToken);
+        return await getForumsStorage.GetForumsAsync(cancellationToken);
     }
 }
