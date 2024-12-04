@@ -25,5 +25,5 @@ public class Topic
     public Forum Forum { get; set; }
 
     [InverseProperty(nameof(Comment.Topic))]
-    public ICollection<Comment> Comments { get; set; }//https://www.youtube.com/live/x_CBZ4xMlm0?si=YVwE-G3nnm96EEQ2&t=3302
+    public ICollection<Comment> Comments { get; set; }
 }

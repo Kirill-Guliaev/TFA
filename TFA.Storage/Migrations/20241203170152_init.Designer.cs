@@ -12,8 +12,8 @@ using TFA.Storage;
 namespace TFA.Storage.Migrations
 {
     [DbContext(typeof(ForumDbContext))]
-    [Migration("20241201082722_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241203170152_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -127,7 +127,7 @@ namespace TFA.Storage.Migrations
                         .IsRequired();
 
                     b.HasOne("TFA.Storage.User", "Author")
-                        .WithMany("Commentss")
+                        .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -163,7 +163,7 @@ namespace TFA.Storage.Migrations
 
             modelBuilder.Entity("TFA.Storage.User", b =>
                 {
-                    b.Navigation("Commentss");
+                    b.Navigation("Comments");
 
                     b.Navigation("Topics");
                 });
