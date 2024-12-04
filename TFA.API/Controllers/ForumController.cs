@@ -52,7 +52,7 @@ public class ForumController : ControllerBase
             return ex switch
             {
                 IntentionManagerException => Forbid(),
-                ForumNotFoundException => StatusCode(StatusCodes.Status410Gone),
+                ForumNotFoundException => StatusCode(StatusCodes.Status404NotFound),
                 _ => StatusCode(StatusCodes.Status500InternalServerError)
             };
         }
