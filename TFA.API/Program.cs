@@ -1,4 +1,6 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using TFA.API.Middlewares;
 using TFA.Domain.Authentication;
 using TFA.Domain.Authorization;
 using TFA.Domain.Identity;
@@ -18,6 +20,10 @@ builder.Services.AddScoped<IGetForumsStorage, GetForumsStorage>();
 builder.Services.AddScoped<IIntentionResolver, TopicIntetionResolver>();
 builder.Services.AddScoped<IIntentionManager, IntentionManager>();
 builder.Services.AddScoped<IIdentityProvider, IdentityProvider>();
+builder.Services.AddScoped<IIdentityProvider, IdentityProvider>();
+builder.Services.AddValidatorsFromAssemblyContaining<TFA.Domain.Models.Forum>();
+
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -26,6 +32,8 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 //app.UseHttpsRedirection();
 app.UseAuthorization();

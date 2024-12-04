@@ -1,4 +1,5 @@
-﻿using TFA.Domain.Authorization;
+﻿using FluentValidation;
+using TFA.Domain.Authorization;
 using TFA.Domain.Exceptions;
 using TFA.Domain.Identity;
 using TFA.Domain.Models;
@@ -7,19 +8,23 @@ namespace TFA.Domain.UseCases.CreateTopic;
 
 public class CreateTopicUseCase : ICreateTopicUseCase
 {
+    private readonly IValidator<CreateTopicCommand> validator;
     private readonly IIntentionManager intentionManager;
     private readonly ICreateTopicStorage createTopicStorage;
     private readonly IIdentityProvider identityProvider;
 
-    public CreateTopicUseCase(IIntentionManager intentionManager, ICreateTopicStorage createTopicStorage, IIdentityProvider identityProvider)
+    public CreateTopicUseCase(IValidator<CreateTopicCommand> validator, IIntentionManager intentionManager, ICreateTopicStorage createTopicStorage, IIdentityProvider identityProvider)
     {
+        this.validator = validator;
         this.intentionManager = intentionManager;
         this.createTopicStorage = createTopicStorage;
         this.identityProvider = identityProvider;
     }
 
-    public async Task<Topic> ExecuteAsync(Guid forumId, string title, CancellationToken cancellationToken)
+    public async Task<Topic> ExecuteAsync(CreateTopicCommand createTopicCommand, CancellationToken cancellationToken)
     {
+        await validator.ValidateAndThrowAsync(createTopicCommand, cancellationToken);
+        var (forumId, title) = createTopicCommand;
         intentionManager.ThrowIfForbidden(TopicIntention.Create);
         var forumExists = await createTopicStorage.ForumExistAsync(forumId, cancellationToken);
         if (!forumExists)

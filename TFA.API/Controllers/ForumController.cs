@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using TFA.API.Models;
-using TFA.Domain.Authorization;
-using TFA.Domain.Exceptions;
 using TFA.Domain.UseCases.CreateTopic;
 using TFA.Domain.UseCases.GetForums;
 
@@ -28,6 +26,7 @@ public class ForumController : ControllerBase
     }
 
     [HttpPost("{forumId:guid}/topics")]
+    [ProducesResponseType(400)]
     [ProducesResponseType(403)]
     [ProducesResponseType(404)]
     [ProducesResponseType(201, Type = typeof(Topic))]
@@ -37,24 +36,12 @@ public class ForumController : ControllerBase
         [FromServices] ICreateTopicUseCase useCase,
         CancellationToken cancellationToken)
     {
-        try
-        {
-            var topic = await useCase.ExecuteAsync(forumId, request.Title, cancellationToken);
+            var topic = await useCase.ExecuteAsync(new(forumId, request.Title), cancellationToken);
             return CreatedAtRoute(nameof(GetForums), new Topic()
             {
                 Id = topic.Id,
                 CreatedAd = topic.CreatedAd,
                 Title = topic.Title
             });
-        }
-        catch(Exception ex)
-        {
-            return ex switch
-            {
-                IntentionManagerException => Forbid(),
-                ForumNotFoundException => StatusCode(StatusCodes.Status404NotFound),
-                _ => StatusCode(StatusCodes.Status500InternalServerError)
-            };
-        }
     }
 }
