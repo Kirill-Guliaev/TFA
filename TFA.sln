@@ -13,6 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFA.Domain.Tests", "TFA.Dom
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{42604642-A2BD-4970-8C77-F1EC50DC87C7}"
 	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
 		Notes.txt = Notes.txt
 	EndProjectSection
 EndProject

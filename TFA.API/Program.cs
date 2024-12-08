@@ -1,5 +1,7 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Serilog.Filters;
 using TFA.API.Middlewares;
 using TFA.Domain.Authentication;
 using TFA.Domain.Authorization;
@@ -23,13 +25,27 @@ builder.Services.AddScoped<IIdentityProvider, IdentityProvider>();
 builder.Services.AddScoped<IIdentityProvider, IdentityProvider>();
 builder.Services.AddValidatorsFromAssemblyContaining<TFA.Domain.Models.Forum>();
 
+builder.Services.AddLogging(b => b.AddSerilog(new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .Enrich.WithProperty("Application", "TFA.API")
+    .Enrich.WithProperty("Environment", builder.Environment.EnvironmentName)
+    .WriteTo.Logger(lc => lc
+        .Filter.ByExcluding(Matching.FromSource("Microsoft"))
+        .WriteTo.OpenSearch(
+            builder.Configuration.GetConnectionString("logs"),
+            indexFormat: "forum-logs-{0:yyyy.MM.dd}"))
+    .WriteTo.Logger(lc => 
+        lc.Filter.ByExcluding(Matching.FromSource("Microsoft"))
+        .WriteTo.Console())
+    .CreateLogger()));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ForumDbContext>(options => options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<ForumDbContext>(options => options.UseNpgsql(connectionString), ServiceLifetime.Singleton);
 var app = builder.Build();
 
+app.Services.GetRequiredService<ForumDbContext>().Database.Migrate();
 app.UseSwagger();
 app.UseSwaggerUI();
 

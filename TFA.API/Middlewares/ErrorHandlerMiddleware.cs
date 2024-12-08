@@ -16,13 +16,14 @@ public class ErrorHandlerMiddleware
 
     public async Task InvokeAsync(
         HttpContext httpContext,
+        ILogger<ErrorHandlerMiddleware> logger,
         ProblemDetailsFactory problemDetailsFactory)
     {
         try
         {
             await next.Invoke(httpContext);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             var statusCode = ex switch
             {
@@ -31,11 +32,24 @@ public class ErrorHandlerMiddleware
                 ValidationException => StatusCodes.Status400BadRequest,
                 _ => StatusCodes.Status500InternalServerError
             };
+            switch (ex)
+            {
+                case DomainException domainException:
+                    logger.LogError(
+                        domainException,
+                        "Domain exception");
+                    break;
+                default:
+                    logger.LogError(
+                        ex,
+                        "Unhandled exception");
+                    break;
+            }
             var problemDetails = ex switch
             {
                 IntentionManagerException => problemDetailsFactory.CreateProblemDetails(httpContext, statusCode, "Error authorization"),
                 DomainException domainException => problemDetailsFactory.CreateProblemDetails(httpContext, statusCode, detail: ex.Message),
-                ValidationException => problemDetailsFactory.CreateValidationProblemDetails(httpContext, new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary(), statusCode, title:"Invalid request"),
+                ValidationException => problemDetailsFactory.CreateValidationProblemDetails(httpContext, new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary(), statusCode, title: "Invalid request"),
                 _ => problemDetailsFactory.CreateProblemDetails(httpContext, statusCode, "Some error", detail: ex.Message),
             };
             httpContext.Response.StatusCode = statusCode;
