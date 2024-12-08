@@ -68,19 +68,6 @@ namespace TFA.Storage.Migrations
                     b.ToTable("Forums");
                 });
 
-            modelBuilder.Entity("TFA.Storage.Test", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tests");
-                });
-
             modelBuilder.Entity("TFA.Storage.Topic", b =>
                 {
                     b.Property<Guid>("TopicId")
@@ -137,7 +124,7 @@ namespace TFA.Storage.Migrations
                         .IsRequired();
 
                     b.HasOne("TFA.Storage.User", "Author")
-                        .WithMany("Comments")
+                        .WithMany("Commentss")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -173,7 +160,7 @@ namespace TFA.Storage.Migrations
 
             modelBuilder.Entity("TFA.Storage.User", b =>
                 {
-                    b.Navigation("Comments");
+                    b.Navigation("Commentss");
 
                     b.Navigation("Topics");
                 });
