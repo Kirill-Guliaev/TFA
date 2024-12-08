@@ -6,7 +6,7 @@ using TFA.Domain.Models;
 
 namespace TFA.Domain.UseCases.CreateTopic;
 
-public class CreateTopicUseCase : ICreateTopicUseCase
+internal class CreateTopicUseCase : ICreateTopicUseCase
 {
     private readonly IValidator<CreateTopicCommand> validator;
     private readonly IIntentionManager intentionManager;

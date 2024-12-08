@@ -3,7 +3,7 @@ using TFA.Domain.UseCases.CreateTopic;
 
 namespace TFA.Storage.Storages;
 
-public class CreateTopicStorage : ICreateTopicStorage
+internal class CreateTopicStorage : ICreateTopicStorage
 {
     private readonly ForumDbContext dbContext;
 

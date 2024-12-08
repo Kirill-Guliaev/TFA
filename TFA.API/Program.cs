@@ -1,29 +1,16 @@
-using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Filters;
 using TFA.API.Middlewares;
-using TFA.Domain.Authentication;
-using TFA.Domain.Authorization;
-using TFA.Domain.Identity;
-using TFA.Domain.UseCases.CreateTopic;
-using TFA.Domain.UseCases.GetForums;
+using TFA.Domain.DependencyInjection;
 using TFA.Storage;
-using TFA.Storage.Storages;
+using TFA.Storage.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("Postgres");
-
-builder.Services.AddScoped<IGetForumsUseCase, GetForumsUseCase>();
-builder.Services.AddScoped<ICreateTopicUseCase, CreateTopicUseCase>();
-builder.Services.AddScoped<ICreateTopicStorage, CreateTopicStorage>();
-builder.Services.AddScoped<IGetForumsStorage, GetForumsStorage>();
-builder.Services.AddScoped<IIntentionResolver, TopicIntetionResolver>();
-builder.Services.AddScoped<IIntentionManager, IntentionManager>();
-builder.Services.AddScoped<IIdentityProvider, IdentityProvider>();
-builder.Services.AddScoped<IIdentityProvider, IdentityProvider>();
-builder.Services.AddValidatorsFromAssemblyContaining<TFA.Domain.Models.Forum>();
+builder.Services
+    .AddForumDomain()
+    .AddForumStorage(builder.Configuration.GetConnectionString("Postgres"));
 
 builder.Services.AddLogging(b => b.AddSerilog(new LoggerConfiguration()
     .MinimumLevel.Debug()
@@ -34,7 +21,7 @@ builder.Services.AddLogging(b => b.AddSerilog(new LoggerConfiguration()
         .WriteTo.OpenSearch(
             builder.Configuration.GetConnectionString("logs"),
             indexFormat: "forum-logs-{0:yyyy.MM.dd}"))
-    .WriteTo.Logger(lc => 
+    .WriteTo.Logger(lc =>
         lc.Filter.ByExcluding(Matching.FromSource("Microsoft"))
         .WriteTo.Console())
     .CreateLogger()));
@@ -42,7 +29,7 @@ builder.Services.AddLogging(b => b.AddSerilog(new LoggerConfiguration()
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<ForumDbContext>(options => options.UseNpgsql(connectionString), ServiceLifetime.Singleton);
+
 var app = builder.Build();
 
 app.Services.GetRequiredService<ForumDbContext>().Database.Migrate();
