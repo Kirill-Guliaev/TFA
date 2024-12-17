@@ -48,9 +48,8 @@ public class ForumController : ControllerBase
 
     [HttpGet("{forumId:guid}/topics")]
     [ProducesResponseType(400)]
-    [ProducesResponseType(403)]
     [ProducesResponseType(404)]
-    [ProducesResponseType(201, Type = typeof(Topic))]
+    [ProducesResponseType(200)]
     public async Task<IActionResult> GetTopics(
         [FromRoute] Guid forumId,
         [FromQuery] int skip,
