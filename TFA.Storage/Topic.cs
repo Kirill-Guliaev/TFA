@@ -10,8 +10,9 @@ public class Topic
 
     public DateTimeOffset CreatedAt { get; set; }    
     
-    public DateTimeOffset UpdatedAt { get; set; }    
+    public DateTimeOffset UpdatedAt { get; set; }
 
+    [MaxLength(100)]
     public string Title { get; set; }
 
     public Guid UserId { get; set; }    
