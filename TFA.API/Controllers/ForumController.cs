@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using TFA.API.Models;
 using TFA.Domain.UseCases.CreateTopic;
 using TFA.Domain.UseCases.GetForums;
+using TFA.Domain.UseCases.GetTopics;
 
 namespace TFA.API.Controllers;
 
@@ -40,8 +41,24 @@ public class ForumController : ControllerBase
             return CreatedAtRoute(nameof(GetForums), new Topic()
             {
                 Id = topic.Id,
-                CreatedAd = topic.CreatedAd,
+                CreatedAd = topic.CreatedAt,
                 Title = topic.Title
             });
+    }
+
+    [HttpGet("{forumId:guid}/topics")]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(403)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(201, Type = typeof(Topic))]
+    public async Task<IActionResult> GetTopics(
+        [FromRoute] Guid forumId,
+        [FromQuery] int skip,
+        [FromQuery] int take,
+        [FromServices] IGetTopicsUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var result = await useCase.ExecuteAsync(new(forumId, skip, take), cancellationToken);
+        return Ok(new { result.resources, result.totalCount });
     }
 }

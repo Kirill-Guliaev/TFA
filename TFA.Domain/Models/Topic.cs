@@ -8,7 +8,7 @@ public class Topic
 
     public string Title { get; set; }
 
-    public DateTimeOffset CreatedAd { get; set; }
+    public DateTimeOffset CreatedAt { get; set; }
 
     public Guid UserId { get; set; }
 }

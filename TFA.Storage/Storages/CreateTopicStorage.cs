@@ -12,11 +12,6 @@ internal class CreateTopicStorage : ICreateTopicStorage
         this.dbContext = dbContext;
     }
 
-    public async Task<bool> ForumExistAsync(Guid forumId, CancellationToken cancellationToken)
-    {
-        return await dbContext.Forums.AnyAsync(f => f.ForumId == forumId, cancellationToken);
-    }
-
     public async Task<Domain.Models.Topic> CreateTopicAsync(Guid forumId, Guid userId, string title, CancellationToken cancellationToken)
     {
         var topic = new Topic()
@@ -33,7 +28,7 @@ internal class CreateTopicStorage : ICreateTopicStorage
         return await dbContext.Topics.Where(t => t.TopicId == topic.TopicId)
             .Select(t => new Domain.Models.Topic { 
                 Id = t.TopicId, 
-                CreatedAd = t.CreatedAt, 
+                CreatedAt = t.CreatedAt, 
                 ForumId = t.ForumId, 
                 Title = t.Title, 
                 UserId = t.UserId 

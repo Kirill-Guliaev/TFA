@@ -1,7 +1,8 @@
 ﻿using FluentAssertions;
+using TFA.Domain.Exceptions;
 using TFA.Domain.UseCases.CreateTopic;
 
-namespace TFA.Domain.Tests;
+namespace TFA.Domain.Tests.CreateTopic;
 
 public class CreateTopicCommandValidatorShould
 {
@@ -25,14 +26,14 @@ public class CreateTopicCommandValidatorShould
     {
         var actual = sut.Validate(command);
         actual.IsValid.Should().BeFalse();
-        actual.Errors.Should().Contain(f=>f.PropertyName == expectedInvalidPropertyName && f.ErrorCode == expectedErrorCode);
+        actual.Errors.Should().Contain(f => f.PropertyName == expectedInvalidPropertyName && f.ErrorCode == expectedErrorCode);
     }
 
     public static IEnumerable<object[]> GetInvalidCommands()
     {
         var validCommand = new CreateTopicCommand(Guid.Parse("40b563d3-8ee6-42fc-8921-c1c530134a24"), "Correct title");
-        yield return new object[] { validCommand with { ForumId = Guid.Empty }, nameof(CreateTopicCommand.ForumId), "Empty" };
-        yield return new object[] { validCommand with { Title = "" } , nameof(CreateTopicCommand.Title) , "Empty"};
-        yield return new object[] { validCommand with { Title = string.Join("a", Enumerable.Range(0, 150)) }, nameof(CreateTopicCommand.Title), "Too long" };
+        yield return new object[] { validCommand with { ForumId = Guid.Empty }, nameof(CreateTopicCommand.ForumId), ValidationErrorCode.Empty };
+        yield return new object[] { validCommand with { Title = "" }, nameof(CreateTopicCommand.Title), ValidationErrorCode.Empty };
+        yield return new object[] { validCommand with { Title = string.Join("a", Enumerable.Range(0, 150)) }, nameof(CreateTopicCommand.Title), ValidationErrorCode.TooLong };
     }
 }
