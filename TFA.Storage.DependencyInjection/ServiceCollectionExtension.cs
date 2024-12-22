@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 using TFA.Domain.UseCases.CreateForum;
 using TFA.Domain.UseCases.CreateTopic;
 using TFA.Domain.UseCases.GetForums;
@@ -20,6 +21,8 @@ public static class ServiceCollectionExtension
             ;
 
         services.AddMemoryCache();
+        services.AddAutoMapper(config => config
+            .AddMaps(Assembly.GetAssembly(typeof(ForumDbContext))));
         services.AddDbContext<ForumDbContext>(options => options.UseNpgsql(dbConnectionString), ServiceLifetime.Singleton);
 
         return services;

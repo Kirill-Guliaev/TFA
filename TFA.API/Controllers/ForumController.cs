@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using TFA.API.Models;
 using TFA.Domain.UseCases.CreateForum;
@@ -21,10 +22,11 @@ public class ForumController : ControllerBase
     [ProducesResponseType(200, Type = typeof(ForumResponse[]))]
     public async Task<IActionResult> GetForums(
         [FromServices] IGetForumsUseCase useCase,
+        [FromServices] IMapper mapper,
         CancellationToken cancellationToken)
     {
         var forums = await useCase.ExecuteAsync(cancellationToken);
-        return Ok(forums.Select(f => new ForumResponse() { Id = f.Id, Title = f.Title }));
+        return Ok(forums.Select(mapper.Map<Forum>));
     }
 
     [HttpPost]
@@ -35,12 +37,13 @@ public class ForumController : ControllerBase
     public async Task<IActionResult> CreateForum(
     [FromBody] CreateForum request,
     [FromServices] ICreateForumUseCase useCase,
+     [FromServices] IMapper mapper,
     CancellationToken cancellationToken)
     {
         var command = new CreateForumCommand(request.Title);
         var forum = await useCase.Execute(command, cancellationToken);
 
-        return CreatedAtRoute(nameof(GetForums), new Forum() { Id = forum.Id, Title = forum.Title });
+        return CreatedAtRoute(nameof(GetForums), mapper.Map<Forum>(forum));
     }
 
     [HttpPost("{forumId:guid}/topics")]
@@ -52,15 +55,11 @@ public class ForumController : ControllerBase
         Guid forumId,
         [FromBody] CreateTopic request,
         [FromServices] ICreateTopicUseCase useCase,
+        [FromServices] IMapper mapper,
         CancellationToken cancellationToken)
     {
         var topic = await useCase.ExecuteAsync(new(forumId, request.Title), cancellationToken);
-        return CreatedAtRoute(nameof(GetForums), new Topic()
-        {
-            Id = topic.Id,
-            CreatedAd = topic.CreatedAt,
-            Title = topic.Title
-        });
+        return CreatedAtRoute(nameof(GetForums), mapper.Map<Topic>(topic));
     }
 
     [HttpGet("{forumId:guid}/topics")]
@@ -72,10 +71,12 @@ public class ForumController : ControllerBase
         [FromQuery] int skip,
         [FromQuery] int take,
         [FromServices] IGetTopicsUseCase useCase,
+        [FromServices] IMapper mapper,
         CancellationToken cancellationToken)
     {
         var result = await useCase.ExecuteAsync(new(forumId, skip, take), cancellationToken);
-        return Ok(new { result.resources, result.totalCount });
+        var topics = result.resources.Select(mapper.Map<Topic>);
+        return Ok(new { topics, result.totalCount });
     }
 
 

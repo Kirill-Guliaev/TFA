@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Filters;
+using TFA.API.Mapping;
 using TFA.API.Middlewares;
 using TFA.Domain.DependencyInjection;
 using TFA.Storage;
@@ -11,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddForumDomain()
     .AddForumStorage(builder.Configuration.GetConnectionString("Postgres"));
+builder.Services.AddAutoMapper(config => config.AddProfile<ApiProfile>());
 
 builder.Services.AddLogging(b => b.AddSerilog(new LoggerConfiguration()
     .MinimumLevel.Debug()
