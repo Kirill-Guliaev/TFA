@@ -4,6 +4,7 @@ using TFA.Domain.Authentication;
 using TFA.Domain.Authorization;
 using TFA.Domain.Identity;
 using TFA.Domain.Models;
+using TFA.Domain.UseCases.CreateForum;
 using TFA.Domain.UseCases.CreateTopic;
 using TFA.Domain.UseCases.GetForums;
 using TFA.Domain.UseCases.GetTopics;
@@ -17,14 +18,20 @@ public static class ServiceCollectionExtension
         services          
             .AddScoped<IGetForumsUseCase, GetForumsUseCase>()
             .AddScoped<ICreateTopicUseCase, CreateTopicUseCase>()
-            .AddScoped<IIntentionResolver, TopicIntetionResolver>()
             .AddScoped<IGetTopicsUseCase, GetTopicsUseCase>()
+            .AddScoped<ICreateForumUseCase, CreateForumUseCase>()
             
 
+            .AddScoped<IIntentionResolver, TopicIntetionResolver>()
             .AddScoped<IIntentionManager, IntentionManager>()
+            .AddScoped<IIntentionResolver, ForumIntentionResolver>()
             .AddScoped<IIdentityProvider, IdentityProvider>();
+
+        
         services.AddValidatorsFromAssemblyContaining<Forum>(includeInternalTypes:true);
-        services.AddMemoryCache();
+
+        services.AddScoped<IGuidFactory, GuidFactory>();
+
         return services;
     }
 }

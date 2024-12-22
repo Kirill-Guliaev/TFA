@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using TFA.Domain.UseCases.CreateForum;
 using TFA.Domain.UseCases.CreateTopic;
 using TFA.Domain.UseCases.GetForums;
 using TFA.Domain.UseCases.GetTopics;
@@ -15,9 +16,12 @@ public static class ServiceCollectionExtension
             .AddScoped<ICreateTopicStorage, CreateTopicStorage>()
             .AddScoped<IGetForumsStorage, GetForumsStorage>()
             .AddScoped<IGetTopicsStorage, GetTopicsStorage>()
+            .AddScoped<ICreateForumStorage, CreateForumStorage>()
             ;
 
+        services.AddMemoryCache();
         services.AddDbContext<ForumDbContext>(options => options.UseNpgsql(dbConnectionString), ServiceLifetime.Singleton);
+
         return services;
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TFA.API.Models;
+using TFA.Domain.UseCases.CreateForum;
 using TFA.Domain.UseCases.CreateTopic;
 using TFA.Domain.UseCases.GetForums;
 using TFA.Domain.UseCases.GetTopics;
@@ -11,7 +12,7 @@ namespace TFA.API.Controllers;
 public class ForumController : ControllerBase
 {
     /// <summary>
-    /// Get lost on every forums
+    /// Get list on every forums
     /// </summary>
     /// <param name="dbContext"></param>
     /// <param name="cancellationToken"></param>
@@ -26,6 +27,22 @@ public class ForumController : ControllerBase
         return Ok(forums.Select(f => new ForumResponse() { Id = f.Id, Title = f.Title }));
     }
 
+    [HttpPost]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(404)]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(201, Type = typeof(Forum))]
+    public async Task<IActionResult> CreateForum(
+    [FromBody] CreateForum request,
+    [FromServices] ICreateForumUseCase useCase,
+    CancellationToken cancellationToken)
+    {
+        var command = new CreateForumCommand(request.Title);
+        var forum = await useCase.Execute(command, cancellationToken);
+
+        return CreatedAtRoute(nameof(GetForums), new Forum() { Id = forum.Id, Title = forum.Title });
+    }
+
     [HttpPost("{forumId:guid}/topics")]
     [ProducesResponseType(400)]
     [ProducesResponseType(403)]
@@ -37,13 +54,13 @@ public class ForumController : ControllerBase
         [FromServices] ICreateTopicUseCase useCase,
         CancellationToken cancellationToken)
     {
-            var topic = await useCase.ExecuteAsync(new(forumId, request.Title), cancellationToken);
-            return CreatedAtRoute(nameof(GetForums), new Topic()
-            {
-                Id = topic.Id,
-                CreatedAd = topic.CreatedAt,
-                Title = topic.Title
-            });
+        var topic = await useCase.ExecuteAsync(new(forumId, request.Title), cancellationToken);
+        return CreatedAtRoute(nameof(GetForums), new Topic()
+        {
+            Id = topic.Id,
+            CreatedAd = topic.CreatedAt,
+            Title = topic.Title
+        });
     }
 
     [HttpGet("{forumId:guid}/topics")]
@@ -60,4 +77,6 @@ public class ForumController : ControllerBase
         var result = await useCase.ExecuteAsync(new(forumId, skip, take), cancellationToken);
         return Ok(new { result.resources, result.totalCount });
     }
+
+
 }
