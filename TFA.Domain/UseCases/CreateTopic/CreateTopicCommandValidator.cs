@@ -9,7 +9,7 @@ internal class CreateTopicCommandValidator : AbstractValidator<CreateTopicComman
     {
         RuleFor(c => c.ForumId)
             .NotEmpty().WithErrorCode(ValidationErrorCode.Empty);
-        RuleFor(t=>t.Title)
+        RuleFor(t => t.Title)
             .Cascade(CascadeMode.Stop)
             .NotEmpty().WithErrorCode(ValidationErrorCode.Empty)
             .MaximumLength(100).WithErrorCode(ValidationErrorCode.TooLong);

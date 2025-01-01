@@ -63,7 +63,6 @@ public class CreateTopicUseCaseShould
         intentionIsAllowedSetup.Returns(true);
         await sut.Invoking(s => s.ExecuteAsync(new(forumId, "Some title"), CancellationToken.None))
             .Should().ThrowAsync<ForumNotFoundException>();
-
     }
 
     [Fact]
