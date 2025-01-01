@@ -1,7 +1,7 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
-using Serilog.Filters;
-using TFA.API.Mapping;
+using System.Reflection;
+using TFA.API.DependencyInjection;
 using TFA.API.Middlewares;
 using TFA.Domain.DependencyInjection;
 using TFA.Storage;
@@ -12,27 +12,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddForumDomain()
     .AddForumStorage(builder.Configuration.GetConnectionString("Postgres"));
-builder.Services.AddAutoMapper(config => config.AddProfile<ApiProfile>());
+builder.Services.AddAutoMapper(config => config.AddMaps(Assembly.GetExecutingAssembly()));
 
-builder.Services.AddLogging(b => b.AddSerilog(new LoggerConfiguration()
-    .MinimumLevel.Debug()
-    .Enrich.WithProperty("Application", "TFA.API")
-    .Enrich.WithProperty("Environment", builder.Environment.EnvironmentName)
-    .WriteTo.Logger(lc => lc
-        .Filter.ByExcluding(Matching.FromSource("Microsoft"))
-        .WriteTo.OpenSearch(
-            builder.Configuration.GetConnectionString("logs"),
-            indexFormat: "forum-logs-{0:yyyy.MM.dd}"))
-    .WriteTo.Logger(lc =>
-        lc.Filter.ByExcluding(Matching.FromSource("Microsoft"))
-        .WriteTo.Console())
-    .CreateLogger()));
+builder.Services.AddApiLoggin(builder.Configuration, builder.Environment);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+var mapper = app.Services.GetRequiredService<IMapper>();
+
+mapper.ConfigurationProvider.AssertConfigurationIsValid();
 
 app.Services.GetRequiredService<ForumDbContext>().Database.Migrate();
 app.UseSwagger();
