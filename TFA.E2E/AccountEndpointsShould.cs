@@ -22,6 +22,7 @@ public class AccountEndpointsShould : IClassFixture<ForumApiApplicationFactory>
         var createdUser = await response.Content.ReadFromJsonAsync<User>();
         using var signInResponse = await httpClien.PostAsync("account/signin", JsonContent.Create(new { login = "TestLogin", password = "Qwerty123" }));
         signInResponse.IsSuccessStatusCode.Should().BeTrue();
+        var t1 = signInResponse.Headers;
         signInResponse.Headers.Should().ContainKey("TFA-Auth-Token");
         var signedInUser = await signInResponse.Content.ReadFromJsonAsync<User>();
         createdUser.Should().NotBeNull();

@@ -12,4 +12,6 @@ public class User : IIdentity
     }
 
     public Guid UserId => userId;
+
+    public static User Guest => new(Guid.Empty);
 }

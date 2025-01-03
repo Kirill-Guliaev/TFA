@@ -8,6 +8,8 @@ using TFA.Domain.UseCases.CreateForum;
 using TFA.Domain.UseCases.CreateTopic;
 using TFA.Domain.UseCases.GetForums;
 using TFA.Domain.UseCases.GetTopics;
+using TFA.Domain.UseCases.SignIn;
+using TFA.Domain.UseCases.SignOn;
 
 namespace TFA.Domain.DependencyInjection;
 
@@ -20,12 +22,19 @@ public static class ServiceCollectionExtension
             .AddScoped<ICreateTopicUseCase, CreateTopicUseCase>()
             .AddScoped<IGetTopicsUseCase, GetTopicsUseCase>()
             .AddScoped<ICreateForumUseCase, CreateForumUseCase>()
+            .AddScoped<ISignOnUseCase, SignOnUseCase>()
+            .AddScoped<ISignInUseCase, SignInUseCase>()
             
 
             .AddScoped<IIntentionResolver, TopicIntetionResolver>()
             .AddScoped<IIntentionManager, IntentionManager>()
             .AddScoped<IIntentionResolver, ForumIntentionResolver>()
-            .AddScoped<IIdentityProvider, IdentityProvider>();
+            .AddScoped<IIdentityProvider, IdentityProvider>()
+            .AddScoped<IPasswordManager, PasswordManager>()
+            .AddScoped<IAuthenticationService, AuthenticationService>()
+            .AddScoped<ISymmetricDecryptor, AesSymmetricEncryptorDecrypor>()
+            .AddScoped<ISymmetricEncryptor, AesSymmetricEncryptorDecrypor>()            
+            ;
 
         
         services.AddValidatorsFromAssemblyContaining<Forum>(includeInternalTypes:true);
