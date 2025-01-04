@@ -26,7 +26,6 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 var mapper = app.Services.GetRequiredService<IMapper>();
-
 mapper.ConfigurationProvider.AssertConfigurationIsValid();
 
 app.Services.GetRequiredService<ForumDbContext>().Database.Migrate();

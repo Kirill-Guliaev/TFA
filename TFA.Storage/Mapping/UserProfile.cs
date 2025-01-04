@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using TFA.Domain.UseCases.SignIn;
+using TFA.Storage.Entities;
 
 namespace TFA.Storage.Mapping;
 

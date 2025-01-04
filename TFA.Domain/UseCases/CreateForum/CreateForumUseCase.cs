@@ -19,11 +19,11 @@ internal class CreateForumUseCase : ICreateForumUseCase
         this.intentionManager = intentionManager;
         this.createForumStorage = createForumStorage;
     }
-    public async Task<Forum> Execute(CreateForumCommand command, CancellationToken cancellationToken)
+    public async Task<Forum> ExecuteAsync(CreateForumCommand command, CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(command, cancellationToken);
         intentionManager.ThrowIfForbidden(ForumIntention.Create);
 
-        return await createForumStorage.Create(command.Title, cancellationToken);
+        return await createForumStorage.CreateAsync(command.Title, cancellationToken);
     }
 }

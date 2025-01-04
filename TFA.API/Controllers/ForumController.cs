@@ -41,7 +41,7 @@ public class ForumController : ControllerBase
     CancellationToken cancellationToken)
     {
         var command = new CreateForumCommand(request.Title);
-        var forum = await useCase.Execute(command, cancellationToken);
+        var forum = await useCase.ExecuteAsync(command, cancellationToken);
 
         return CreatedAtRoute(nameof(GetForums), mapper.Map<Forum>(forum));
     }

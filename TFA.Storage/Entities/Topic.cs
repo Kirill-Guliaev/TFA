@@ -1,23 +1,23 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TFA.Storage;
+namespace TFA.Storage.Entities;
 
 public class Topic
 {
     [Key]
     public Guid TopicId { get; set; }
 
-    public DateTimeOffset CreatedAt { get; set; }    
-    
+    public DateTimeOffset CreatedAt { get; set; }
+
     public DateTimeOffset UpdatedAt { get; set; }
 
     [MaxLength(100)]
     public string Title { get; set; }
 
-    public Guid UserId { get; set; }    
+    public Guid UserId { get; set; }
 
-    public Guid ForumId { get;set; }
+    public Guid ForumId { get; set; }
 
     [ForeignKey(nameof(UserId))]
     public User Author { get; set; }

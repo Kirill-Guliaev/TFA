@@ -26,7 +26,7 @@ internal class CreateForumStorage : ICreateForumStorage
         this.mapper = mapper;
     }
 
-    public async Task<Domain.Models.Forum> Create(string Title, CancellationToken cancellationToken)
+    public async Task<Domain.Models.Forum> CreateAsync(string Title, CancellationToken cancellationToken)
     {
         var newForum = new Forum
         {
