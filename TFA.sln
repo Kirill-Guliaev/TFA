@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFA.Storage.DependencyInjec
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFA.E2E", "TFA.E2E\TFA.E2E.csproj", "{D107FF48-32F7-400A-AFE3-3D7AD11A6237}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFA.Storage.Tests", "TFA.Storage.Tests\TFA.Storage.Tests.csproj", "{EEA2BA4B-650E-414A-B9A3-EA524FEFE247}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +60,10 @@ Global
 		{D107FF48-32F7-400A-AFE3-3D7AD11A6237}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D107FF48-32F7-400A-AFE3-3D7AD11A6237}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D107FF48-32F7-400A-AFE3-3D7AD11A6237}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEA2BA4B-650E-414A-B9A3-EA524FEFE247}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEA2BA4B-650E-414A-B9A3-EA524FEFE247}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEA2BA4B-650E-414A-B9A3-EA524FEFE247}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEA2BA4B-650E-414A-B9A3-EA524FEFE247}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

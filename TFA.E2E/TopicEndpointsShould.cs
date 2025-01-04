@@ -8,7 +8,6 @@ namespace TFA.E2E;
 public class TopicEndpointsShould : IClassFixture<ForumApiApplicationFactory>, IAsyncLifetime
 {
     private readonly ForumApiApplicationFactory factory;
-    private readonly Guid forumId = Guid.Parse("92f9a622-ca5e-46d5-8569-c09d6c914faa");
     public TopicEndpointsShould(ForumApiApplicationFactory factory)
     {
         this.factory = factory;

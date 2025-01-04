@@ -13,16 +13,6 @@ public class ForumEndpointsShould : IClassFixture<ForumApiApplicationFactory>
         this.factory = factory;
     }
 
-    //[Fact]
-    //public async Task ReturnListOfForums()
-    //{
-    //    using var httpClient = factory.CreateClient();
-    //    using var response = await httpClient.GetAsync("forums");
-    //    response.Invoking(r => r.EnsureSuccessStatusCode()).Should().NotThrow();
-    //    var result = await response.Content.ReadAsStringAsync();
-    //    result.Should().Be("[]");
-    //}
-
     [Fact]
     public async Task CreateNewForum()
     {
