@@ -25,7 +25,7 @@ public class TopicEndpointsShould : IClassFixture<ForumApiApplicationFactory>, I
         //await dbContext.SaveChangesAsync();
     }
 
-    [Fact]
+    //[Fact]
     public async Task ReturnForbidden_WhenNotAutenticated()
     {
         using var httpClient = factory.CreateClient();

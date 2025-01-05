@@ -3,8 +3,8 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using TFA.Domain;
-using TFA.Domain.Models;
 using TFA.Domain.UseCases.CreateForum;
+using TFA.Storage.Entities;
 
 namespace TFA.Storage.Storages;
 
