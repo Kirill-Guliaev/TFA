@@ -10,6 +10,7 @@ using TFA.Domain.UseCases.GetForums;
 using TFA.Domain.UseCases.GetTopics;
 using TFA.Domain.UseCases.SignIn;
 using TFA.Domain.UseCases.SignOn;
+using TFA.Domain.UseCases.SignOut;
 
 namespace TFA.Domain.DependencyInjection;
 
@@ -23,18 +24,18 @@ public static class ServiceCollectionExtension
             .AddScoped<IGetTopicsUseCase, GetTopicsUseCase>()
             .AddScoped<ICreateForumUseCase, CreateForumUseCase>()
             .AddScoped<ISignOnUseCase, SignOnUseCase>()
-            .AddScoped<ISignInUseCase, SignInUseCase>()
+            .AddScoped<ISignInUseCase, SignInUseCase>()            
+            .AddScoped<ISignOutUseCase, SignOutUseCase>()            
             
-
             .AddScoped<IIntentionResolver, TopicIntetionResolver>()
             .AddScoped<IIntentionManager, IntentionManager>()
             .AddScoped<IIntentionResolver, ForumIntentionResolver>()
             .AddScoped<IIdentityProvider, IdentityProvider>()
             .AddScoped<IPasswordManager, PasswordManager>()
             .AddScoped<IAuthenticationService, AuthenticationService>()
-            .AddScoped<ISymmetricDecryptor, AesSymmetricEncryptorDecrypor>()
-            .AddScoped<ISymmetricEncryptor, AesSymmetricEncryptorDecrypor>()            
-            ;
+            .AddScoped<ISymmetricDecryptor, AesSymmetricEncryptorDecryptor>()
+            .AddScoped<ISymmetricEncryptor, AesSymmetricEncryptorDecryptor>()
+        ;
 
         
         services.AddValidatorsFromAssemblyContaining<Forum>(includeInternalTypes:true);

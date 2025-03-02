@@ -1,12 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using TFA.Domain.Authentication;
 using TFA.Domain.UseCases.CreateForum;
 using TFA.Domain.UseCases.CreateTopic;
 using TFA.Domain.UseCases.GetForums;
 using TFA.Domain.UseCases.GetTopics;
 using TFA.Domain.UseCases.SignIn;
 using TFA.Domain.UseCases.SignOn;
+using TFA.Domain.UseCases.SignOut;
 using TFA.Storage.Storages;
 
 namespace TFA.Storage.DependencyInjection;
@@ -22,6 +24,8 @@ public static class ServiceCollectionExtension
             .AddScoped<ICreateForumStorage, CreateForumStorage>()
             .AddScoped<ISignOnStorage, SignOnStorage>()
             .AddScoped<ISignInStorage, SignInStorage>()
+            .AddScoped<ISignOutStorage, SignOutStorage>()
+            .AddScoped<IAuthenticationStorage, AuthenticationStorage>()
             ;
 
         services.AddMemoryCache();

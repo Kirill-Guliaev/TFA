@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TFA.Storage.Migrations
 {
     /// <inheritdoc />
-    public partial class UserSession : Migration
+    public partial class UserSessions : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Session",
+                name: "Sessions",
                 columns: table => new
                 {
                     SessionId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -21,9 +21,9 @@ namespace TFA.Storage.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Session", x => x.SessionId);
+                    table.PrimaryKey("PK_Sessions", x => x.SessionId);
                     table.ForeignKey(
-                        name: "FK_Session_Users_UserId",
+                        name: "FK_Sessions_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
@@ -31,8 +31,8 @@ namespace TFA.Storage.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Session_UserId",
-                table: "Session",
+                name: "IX_Sessions_UserId",
+                table: "Sessions",
                 column: "UserId");
         }
 
@@ -40,7 +40,7 @@ namespace TFA.Storage.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Session");
+                name: "Sessions");
         }
     }
 }

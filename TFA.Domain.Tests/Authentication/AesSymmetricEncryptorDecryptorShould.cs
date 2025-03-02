@@ -1,19 +1,17 @@
 ﻿using FluentAssertions;
 using System.Security.Cryptography;
 using TFA.Domain.Authentication;
-using Xunit.Abstractions;
 
 namespace TFA.Domain.Tests.Authentication;
 
 public class AesSymmetricEncryptorDecryptorShould
 {
-    private readonly AesSymmetricEncryptorDecrypor sut = new();
+    private readonly AesSymmetricEncryptorDecryptor sut = new();
 
     [Fact]
     public async Task ReturnMeaningfullEncryptedString()
     {
         var key = RandomNumberGenerator.GetBytes(32);
-        var t1 = Convert.ToBase64String(key);
         string actual = await sut.EncryptAsync("password", key, CancellationToken.None);
         actual.Should().NotBeEmpty();
     }

@@ -12,8 +12,8 @@ using TFA.Storage;
 namespace TFA.Storage.Migrations
 {
     [DbContext(typeof(ForumDbContext))]
-    [Migration("20250105083324_UserSession")]
-    partial class UserSession
+    [Migration("20250302162327_UserSessions")]
+    partial class UserSessions
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,7 +88,7 @@ namespace TFA.Storage.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Session");
+                    b.ToTable("Sessions");
                 });
 
             modelBuilder.Entity("TFA.Storage.Entities.Topic", b =>

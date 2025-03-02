@@ -25,6 +25,6 @@ internal class SignOnUseCase : ISignOnUseCase
         await validator.ValidateAndThrowAsync(command, cancellationToken);
         (byte[] salt, byte[] hash) = passwordManager.GeneratePasswordParts(command.Password);
         var userId = await storage.CreateUser(command.Login, salt, hash, cancellationToken);
-        return new User(userId);
+        return new User(userId, Guid.Empty);
     }
 }

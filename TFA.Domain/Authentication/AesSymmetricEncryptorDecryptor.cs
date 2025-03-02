@@ -3,7 +3,7 @@ using System.Text;
 
 namespace TFA.Domain.Authentication;
 
-internal class AesSymmetricEncryptorDecrypor : ISymmetricEncryptor, ISymmetricDecryptor
+internal class AesSymmetricEncryptorDecryptor : ISymmetricEncryptor, ISymmetricDecryptor
 {
     private const int IvSize = 16;
     private readonly Lazy<Aes> aes = new(Aes.Create);
@@ -29,10 +29,8 @@ internal class AesSymmetricEncryptorDecrypor : ISymmetricEncryptor, ISymmetricDe
         var iv = RandomNumberGenerator.GetBytes(IvSize);
         using var encryptedSteam = new MemoryStream();
         await encryptedSteam.WriteAsync(iv, cancellationToken);
-        await using (var stream = new CryptoStream(
-           encryptedSteam,
-           aes.Value.CreateEncryptor(key, iv),
-           CryptoStreamMode.Write))
+        var encryptor = aes.Value.CreateEncryptor(key, iv);
+        await using (var stream = new CryptoStream(encryptedSteam, encryptor, CryptoStreamMode.Write))
         {
             await stream.WriteAsync(Encoding.UTF8.GetBytes(text), cancellationToken);
         }
