@@ -58,7 +58,7 @@ internal class SignInUseCase : ISignInUseCase
                 }
             });
         }
-        var sessionId = await storage.CreateSessionAsync(user.UserId, DateTimeOffset.Now + TimeSpan.FromHours(1), cancellationToken);
+        var sessionId = await storage.CreateSessionAsync(user.UserId, DateTimeOffset.UtcNow + TimeSpan.FromHours(1), cancellationToken);
         var token = await symmetricEncryptor.EncryptAsync(sessionId.ToString(), configuration.Key, cancellationToken);
         return (new User(user.UserId, sessionId), token);
     }

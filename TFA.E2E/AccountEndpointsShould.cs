@@ -22,14 +22,11 @@ public class AccountEndpointsShould : IClassFixture<ForumApiApplicationFactory>
         var createdUser = await response.Content.ReadFromJsonAsync<User>();
         using var signInResponse = await httpClien.PostAsync("account/signin", JsonContent.Create(new { login = "TestLogin", password = "Qwerty123" }));
         signInResponse.IsSuccessStatusCode.Should().BeTrue();
-        signInResponse.Headers.Should().ContainKey("TFA-Auth-Token");
+
         var signedInUser = await signInResponse.Content.ReadFromJsonAsync<User>();
-        createdUser.Should().NotBeNull();
-        signedInUser
-            .Should()
-            .NotBeNull()
-            .And
-            .Subject.As<User>().UserId
-            .Equals(createdUser!.UserId);
+        signedInUser!.UserId.Should().Be(createdUser!.UserId);
+
+        var createForumResponse = await httpClien.PostAsync("forums", JsonContent.Create(new { title = "Test Title" }));
+        createForumResponse.IsSuccessStatusCode.Should().BeTrue();
     }
 }

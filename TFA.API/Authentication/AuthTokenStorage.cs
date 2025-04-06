@@ -6,14 +6,14 @@ internal class AuthTokenStorage : IAuthTokenStorage
 
     public void Store(HttpContext httpContext, string token)
     {
-        httpContext.Response.Headers[HeaderKey] = token;
+        httpContext.Response.Cookies.Append(HeaderKey, token);
     }
 
     public bool TryExtract(HttpContext httpContext, out string token)
     {
-        if (httpContext.Response.Headers.TryGetValue(HeaderKey, out var values) && !string.IsNullOrWhiteSpace(values.FirstOrDefault()))
+        if (httpContext.Request.Cookies.TryGetValue(HeaderKey, out var value) && !string.IsNullOrEmpty(value))
         {
-            token = values.First();
+            token = value;
             return true;
         }
         token = string.Empty;

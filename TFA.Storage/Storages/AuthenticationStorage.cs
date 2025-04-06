@@ -1,11 +1,26 @@
-﻿using TFA.Domain.Authentication;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using TFA.Domain.Authentication;
 
 namespace TFA.Storage.Storages;
 
 public class AuthenticationStorage : IAuthenticationStorage
 {
-    public Task<Session?> FindSessionAsync(Guid sessionId, CancellationToken cancellationToken)
+    private readonly ForumDbContext forumDbContext;
+    private readonly IMapper mapper;
+
+    public AuthenticationStorage(ForumDbContext forumDbContext, IMapper mapper)
     {
-        throw new NotImplementedException();
+        this.forumDbContext = forumDbContext;
+        this.mapper = mapper;
+    }
+
+    public async Task<Session?> FindSessionAsync(Guid sessionId, CancellationToken cancellationToken)
+    {
+        return await forumDbContext.Sessions
+                .Where(s => s.SessionId == sessionId)
+                .ProjectTo<Session>(mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync(cancellationToken);
     }
 }

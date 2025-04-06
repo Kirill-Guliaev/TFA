@@ -9,5 +9,6 @@ public class UserProfile : Profile
     public UserProfile()
     {
         CreateMap<User, RecognisedUser>();
+        CreateMap<Session, TFA.Domain.Authentication.Session>();
     }
 }
