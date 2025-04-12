@@ -16,6 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 		docker-compose.yml = docker-compose.yml
 		Notes.txt = Notes.txt
+		prometheus.yml = prometheus.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TFA.Domain.DependencyInjection", "TFA.Domain.DependencyInjection\TFA.Domain.DependencyInjection.csproj", "{18C838E1-0FAC-4468-A3AD-2ECCA8140FA0}"
@@ -67,5 +68,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A76D8EF3-BE07-40EE-900C-33F66322D223}
 	EndGlobalSection
 EndGlobal

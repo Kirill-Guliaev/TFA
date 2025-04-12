@@ -4,6 +4,7 @@ using TFA.Domain.Authentication;
 using TFA.Domain.Authorization;
 using TFA.Domain.Identity;
 using TFA.Domain.Models;
+using TFA.Domain.Monitoring;
 using TFA.Domain.UseCases.CreateForum;
 using TFA.Domain.UseCases.CreateTopic;
 using TFA.Domain.UseCases.GetForums;
@@ -35,6 +36,8 @@ public static class ServiceCollectionExtension
             .AddScoped<IAuthenticationService, AuthenticationService>()
             .AddScoped<ISymmetricDecryptor, AesSymmetricEncryptorDecryptor>()
             .AddScoped<ISymmetricEncryptor, AesSymmetricEncryptorDecryptor>()
+
+            .AddSingleton<DomainMetrics>()
         ;
 
         

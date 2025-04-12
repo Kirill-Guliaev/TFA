@@ -2,8 +2,8 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using TFA.API.Authentication;
-using TFA.API.DependencyInjection;
 using TFA.API.Middlewares;
+using TFA.API.Monitoring;
 using TFA.Domain.Authentication;
 using TFA.Domain.DependencyInjection;
 using TFA.Storage;
@@ -17,7 +17,9 @@ builder.Services
 builder.Services.AddAutoMapper(config => config.AddMaps(Assembly.GetExecutingAssembly()));
 builder.Services.AddScoped<IAuthTokenStorage, AuthTokenStorage>();
 
-builder.Services.AddApiLoggin(builder.Configuration, builder.Environment);
+builder.Services
+    .AddApiLoggin(builder.Configuration, builder.Environment)
+    .AddApiMetrics();
 builder.Services.Configure<AuthenticationConfiguration>(builder.Configuration.GetSection("Authentication").Bind);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -37,7 +39,9 @@ app.UseMiddleware<AuthenticationMiddleware>();
 
 //app.UseHttpsRedirection();
 app.UseAuthorization();
+
 app.MapControllers();
+app.MapPrometheusScrapingEndpoint();
 
 app.Run();
 
